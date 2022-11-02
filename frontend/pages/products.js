@@ -1,8 +1,16 @@
 import Link from "next/link";
-import React from "react";
+import React, {useState, useEffect} from "react";
+
 
 const Products = (props) => {
-  return (
+const [baseUrl, setBaseUrl] = useState('')
+
+  useEffect(()=>{
+    setBaseUrl(window.location.hostname)
+  },[])
+
+
+  return  baseUrl && (
     <div className="container mx-auto px-4">
       <section className="text-gray-600 body-font">
         <div className="container px-5 md:py-24 mx-auto">
@@ -21,7 +29,7 @@ const Products = (props) => {
                   <div className="bg-gray-100 p-6 rounded-lg">
                     <img
                       className="h-96 rounded m-auto mb-8"
-                      src={`http://192.168.2.183:1337${item.attributes.image.data.attributes.url}`}
+                      src={`http://${baseUrl}:1337${item.attributes.image.data.attributes.url}`}
                       alt="content"
                     />
                     <h3 className="tracking-widest text-indigo-500 text-xs font-medium title-font">
@@ -49,12 +57,11 @@ const Products = (props) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   let data = await fetch("http://localhost:1337/api/products?populate=*", {
     method: "GET",
     headers: {
-      Authorization:
-        "Bearer d3ff64fc5bf73d352f6081ea5efa5eebd195c5dcda8d0e913ff6043e4bca3fbedf8923f9c0125e5c4af2ce4b229cf720669eac9c366d6c2b23f85cdb90fe3a4168b9c6e35e565bd9441b2cca0d0e783d49df606cb623109c16953d572e3a23ae2d1e4fa3f86e9397f90d2b6eca2ab88fefb34695bfe8e30a06b4d346229f3c62",
+      Authorization: "Bearer d3ff64fc5bf73d352f6081ea5efa5eebd195c5dcda8d0e913ff6043e4bca3fbedf8923f9c0125e5c4af2ce4b229cf720669eac9c366d6c2b23f85cdb90fe3a4168b9c6e35e565bd9441b2cca0d0e783d49df606cb623109c16953d572e3a23ae2d1e4fa3f86e9397f90d2b6eca2ab88fefb34695bfe8e30a06b4d346229f3c62",
     },
   });
   let products = await data.json();

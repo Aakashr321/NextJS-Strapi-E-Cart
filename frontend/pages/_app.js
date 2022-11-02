@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/globals.css";
 import Navbar from "../src/components/Navbar";
+import Footer from "../src/components/Footer";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -8,15 +9,15 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   const [cart, setCart] = useState([]);
-  const [reloadKey, setReloadKey] = useState(1)
+  const [reloadKey, setReloadKey] = useState(1);
 
   const addToCart = (item, qty, price) => {
     let newCart = cart;
-    for(let i= 0; i<qty ; i++){
-      newCart.push([item,price])
+    for (let i = 0; i < qty; i++) {
+      newCart.push([item, price]);
     }
     setCart(newCart);
-    setReloadKey(Math.random())
+    setReloadKey(Math.random());
   };
 
   const removeFromCart = (item, qty) => {
@@ -39,6 +40,7 @@ function MyApp({ Component, pageProps }) {
         clearCart={clearCart}
         {...pageProps}
       />
+      <Footer />
     </>
   );
 }
