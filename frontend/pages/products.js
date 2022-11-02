@@ -17,11 +17,11 @@ const Products = (props) => {
           <div className="flex flex-wrap -m-4">
             {props?.products?.data?.map((item) => {
               return (
-                <div key={item.id} className="xl:w-1/4 md:w-1/2 p-4">
+                <div key={item.attributes.slug} className="xl:w-1/4 md:w-1/2 p-4">
                   <div className="bg-gray-100 p-6 rounded-lg">
                     <img
                       className="h-96 rounded m-auto mb-8"
-                      src={`http://localhost:1337${item.attributes.image.data.attributes.formats.thumbnail.url}`}
+                      src={`http://192.168.2.183:1337${item.attributes.image.data.attributes.url}`}
                       alt="content"
                     />
                     <h3 className="tracking-widest text-indigo-500 text-xs font-medium title-font">
@@ -36,7 +36,7 @@ const Products = (props) => {
                       {item.attributes.description.substring(0,70)}...
                     </p>
                     <Link href={`/product/${item.attributes.slug}`}>
-                    <button class="my-2 text-white bg-indigo-500 border-0 py-1 md:py-2 px-2 md:px-4 focus:outline-none hover:bg-indigo-600 rounded text-sm">Buy Now</button>
+                    <button className="my-2 text-white bg-indigo-500 border-0 py-1 md:py-2 px-2 md:px-4 focus:outline-none hover:bg-indigo-600 rounded text-sm">Buy Now</button>
                     </Link>
                   </div>
                 </div>
@@ -58,7 +58,6 @@ export async function getServerSideProps() {
     },
   });
   let products = await data.json();
-  console.log(products);
   return {
     props: { products },
   };
