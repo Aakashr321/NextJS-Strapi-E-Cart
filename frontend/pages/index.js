@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div className="container mx-auto px-4">
-      <img className="object-none object-center bg-yellow-300 w-[100vw] h-[40vh]" src="bg.jpg" alt="background" />
+      <img className="object-cover bg-yellow-300 w-[100vw] h-[40vh]" src="bg.jpg" alt="background" />
       
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">

@@ -61,7 +61,7 @@ export async function getServerSideProps(context) {
   let data = await fetch("http://localhost:1337/api/products?populate=*", {
     method: "GET",
     headers: {
-      Authorization: "Bearer d3ff64fc5bf73d352f6081ea5efa5eebd195c5dcda8d0e913ff6043e4bca3fbedf8923f9c0125e5c4af2ce4b229cf720669eac9c366d6c2b23f85cdb90fe3a4168b9c6e35e565bd9441b2cca0d0e783d49df606cb623109c16953d572e3a23ae2d1e4fa3f86e9397f90d2b6eca2ab88fefb34695bfe8e30a06b4d346229f3c62",
+      Authorization: process.env.JWT_READONLY_TOKEN,
     },
   });
   let products = await data.json();

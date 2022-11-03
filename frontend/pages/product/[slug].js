@@ -1,20 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const Slug = ({product, addToCart}) => {
+const Slug = ({ product, addToCart }) => {
   const router = useRouter();
   const { slug } = router.query;
+
+  const [baseUrl, setBaseUrl] = useState("");
+
+  useEffect(() => {
+    setBaseUrl(window.location.hostname);
+  }, []);
 
   return (
     <div>
       <section className="text-gray-600 body-font overflow-hidden">
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
-            <img
-              alt="ecommerce"
-              className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-              src="https://dummyimage.com/400x400"
-            />
+            <div className="flex justify-center item-center w-full lg:w-auto">
+              <img
+                alt="ecommerce"
+                className="rounded"
+                src={`http://${baseUrl}:1337${product.attributes.image.data.attributes.url}`}
+              />
+            </div>
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
                 MyShop
@@ -157,13 +165,23 @@ const Slug = ({product, addToCart}) => {
               </div>
               <div className="flex">
                 <span className="title-font font-medium text-2xl text-gray-900">
-                ₹{product.attributes.price}
+                  ₹{product.attributes.price}
                 </span>
                 <div className="flex mx-2">
-                  <button onClick={()=>{addToCart(slug,1, product.attributes.price)}} className="flex ml-auto text-white mx-2 bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded">
-                   Add to Cart 
+                  <button
+                    onClick={() => {
+                      addToCart(slug, 1, product.attributes.price);
+                    }}
+                    className="flex ml-auto text-white mx-2 bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded"
+                  >
+                    Add to Cart
                   </button>
-                  <button onClick={()=>{router.push('/checkout')}} className="flex ml-auto text-white mx-2 bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded">
+                  <button
+                    onClick={() => {
+                      router.push("/checkout");
+                    }}
+                    className="flex ml-auto text-white mx-2 bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded"
+                  >
                     Checkout
                   </button>
                 </div>
@@ -190,17 +208,19 @@ const Slug = ({product, addToCart}) => {
 
 export async function getServerSideProps(context) {
   let data = await fetch(
-    `http://localhost:1337/api/products?filters[slug]=` + context.query.slug,
+    `http://localhost:1337/api/products?filters[slug]=` +
+      context.query.slug +
+      "&populate=*",
     {
       method: "GET",
       headers: {
-        Authorization: "Bearer d3ff64fc5bf73d352f6081ea5efa5eebd195c5dcda8d0e913ff6043e4bca3fbedf8923f9c0125e5c4af2ce4b229cf720669eac9c366d6c2b23f85cdb90fe3a4168b9c6e35e565bd9441b2cca0d0e783d49df606cb623109c16953d572e3a23ae2d1e4fa3f86e9397f90d2b6eca2ab88fefb34695bfe8e30a06b4d346229f3c62",
+        Authorization: process.env.JWT_READONLY_TOKEN,
       },
     }
   );
   let product = await data.json();
   return {
-    props: { product : product.data[0] },
+    props: { product: product.data[0] },
   };
 }
 
